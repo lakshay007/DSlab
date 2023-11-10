@@ -1,0 +1,156 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct node{
+    int data;
+    struct node * next;
+};
+typedef struct node * NODE;
+NODE head = NULL;
+NODE createnode(int data){
+    NODE newnode = (NODE)malloc(sizeof(struct node));
+    newnode -> data = data;
+    newnode -> next = NULL;
+    return newnode;
+}
+void insert( int data) {
+    NODE newNode = createnode(data);
+    if (head == NULL) {
+        head = newNode;
+    } else {
+        NODE current = head;
+        while (current->next != NULL) {
+            current = current->next;
+    }
+        current->next = newNode;
+    }
+
+}
+void insertbefore(int el, int data){
+    NODE newnode = createnode(data);
+    NODE temp = head;
+    while(temp->next->data!=el){
+        temp = temp->next;
+    }
+    newnode->next = temp->next;
+    temp->next = newnode;
+
+}
+void insertafter(int el, int data){
+    NODE newnode = createnode(data);
+    NODE temp = head;
+    while(temp->data!=el){
+        temp = temp->next;
+    }
+    newnode->next = temp->next;
+    temp->next = newnode;
+
+}
+void delete( int data) {
+    if (head == NULL) {
+        printf("Linked list is empty.\n");
+        return ;
+}
+    NODE current = head;
+    NODE prev = NULL;
+    while (current != NULL && current->data != data) {
+        prev = current;
+        current = current->next;
+}
+    if (current == NULL) {
+        printf("Element not found in the linked list.\n");
+        return;
+}
+    if (prev == NULL) {
+        head = current->next;
+    } else {
+        prev->next = current->next;
+}
+    free(current);
+    printf("Element deleted successfully.\n");
+
+}
+void rev(){
+    NODE curr = head;
+    NODE prev = NULL;
+    NODE forw;
+    while(curr!=NULL){
+        forw = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = forw;
+    }
+    head = prev;
+}
+void print(NODE head){
+    NODE temp = head;
+    while(temp!=NULL){
+            printf("%d ", temp->data);
+        temp = temp->next;
+    }
+}
+void altdelete(){
+    int cnt = 0;
+    NODE temp = head->next;
+    head = head->next;
+    NODE temp2;
+    while(temp!=NULL && temp->next!=NULL){
+        if(cnt%2==0){
+        temp->next = temp->next->next;
+        temp = temp->next;}
+        cnt++;
+    }
+    printf("nodes deleted ");
+
+}
+
+int main() {
+
+int choice, data;
+while (1) {
+printf("\n1. Insert an element at the end\n");
+printf("2. insert an element after element\n");
+printf("3. insert an element before element\n");
+printf("4. Display the linked list\n");
+printf("5. delete an element\n");
+printf("6. reverse the list\n");
+printf("7. delete alternate nodes\n");
+printf("8. Exit\n");
+printf("Enter your choice: ");
+scanf("%d", &choice);
+switch (choice) {
+case 1:
+    printf("Enter the element to insert: ");
+    scanf("%d", &data);
+     insert( data);
+    break;
+case 2:
+    printf("Enter the element to insert and the element after which to insert: ");
+    int el;
+    scanf("%d %d", &data, &el);
+    insertafter(el,data);
+    break;
+case 3:
+    printf("Enter the element to insert and the element before which to insert: ");
+    scanf("%d %d", &data, &el);
+     insertbefore(el,data);
+    break;
+case 4:
+    print(head);
+    break;
+case 5:
+    printf("\n enter the element to be deleted\n");
+    scanf("%d", &el);
+     delete( el);
+    break;
+case 6:
+    rev();
+    break;
+case 7:
+    altdelete();
+    break;
+case 8:exit(0);
+
+}
+}
+return 0;
+}
